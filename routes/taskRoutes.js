@@ -25,7 +25,7 @@ router.get("/tasks", async (req, res) => {
 });
 
 // Get Task Name by ID
-router.get("/tasks/:id/name", async (req, res) => {
+router.get("/tasks/:id", async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
     if (!task) {
