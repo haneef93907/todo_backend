@@ -24,10 +24,38 @@ router.get("/tasks", async (req, res) => {
   }
 });
 
+// Get Task Name by ID
+router.get("/tasks/:id/name", async (req, res) => {
+  try {
+    const task = await Task.findById(req.params.id);
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+    res.json({ name: task.name });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Edit/Update a Task
+router.put("/tasks/:id", async (req, res) => {
+  try {
+    const task = await Task.findByIdAndUpdate(req.params.id, req.body, {
+      new: true, // Return the updated task
+      runValidators: true, // Run validation on updated fields
+    });
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+    res.json(task);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 // Delete a Task
 router.delete("/tasks/:id", async (req, res) => {
   try {
-    debugger;
     await Task.findByIdAndDelete(req.params.id);
     res.json({ message: "Task deleted successfully" });
   } catch (err) {
